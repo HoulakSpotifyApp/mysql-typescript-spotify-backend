@@ -15,6 +15,7 @@ export async function createUser(req: Request, res: Response){
   newUser.id_spotify = "73a843357efd4a8a8b3efbf634505bc7";
   // Se asigna el nombre del artista que viene por parametro
   newUser.nombre_artista = req.params.param;
+  //Instancia de Conexion
   const conn = await connect();
   const users = await conn.query('INSERT INTO users SET ?', [newUser]);
   res.json({
