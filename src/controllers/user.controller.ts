@@ -11,9 +11,9 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
 export async function createUser(req: Request, res: Response){
 
   const newUser: User = req.body;
-  //se asigna de forma estatica ya que en este caso en particular siempre va a ser el mismo
+  //se asigna de forma estatica ya que en este caso en particular siempre va a ser el mismo 
   newUser.id_spotify = "73a843357efd4a8a8b3efbf634505bc7";
-  // Nombre del artista que viene por parametro
+  // Se asigna el nombre del artista que viene por parametro
   newUser.nombre_artista = req.params.param;
   const conn = await connect();
   const users = await conn.query('INSERT INTO users SET ?', [newUser]);
