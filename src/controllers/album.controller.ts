@@ -1,13 +1,9 @@
 import {Request, Response} from 'express'
-import { connect } from '../database'
+
 import {Album} from '../interfaces/Album'
 
 
-export async function getUsers(req: Request, res: Response): Promise<Response> {
-  const conn = await connect();
-  const users = await conn.query('SELECT * FROM users');
-  return res.json(users[0]);
-}
+
 
 export async function getAlbums(req: Request, res: Response){
 

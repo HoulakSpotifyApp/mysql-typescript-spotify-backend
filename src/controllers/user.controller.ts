@@ -1,25 +1,28 @@
-import {Request, Response} from 'express'
-import { connect } from '../database'
-import {User} from '../interfaces/User'
+import {NextFunction, Request, Response} from 'express'
 
-export async function getUsers(req: Request, res: Response): Promise<Response> {
-  const conn = await connect();
-  const users = await conn.query('SELECT * FROM users');
-  return res.json(users[0]);
-}
+import {Album} from '../interfaces/Album'
+import { DatabaseRepository } from '../declarations'
+import { User } from '../models/User'
 
-export async function createUser(req: Request, res: Response){
 
-  const newUser: User = req.body;
-  //se asigna de forma estatica ya que en este caso en particular siempre va a ser el mismo 
-  newUser.id_spotify = "73a843357efd4a8a8b3efbf634505bc7";
-  // Se asigna el nombre del artista que viene por parametro
-  newUser.nombre_artista = req.params.param;
-  //Instancia de Conexion
-  const conn = await connect();
-  const users = await conn.query('INSERT INTO users SET ?', [newUser]);
-  res.json({
-    message:"creado con exito"
-  })
+//Controlador que usa el repository
+
+export class UserController {
+
+  constructor(private repository: DatabaseRepository<User>){
+
+  }
+  async create(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+    
+      const body = req.body;
+      body.id_spotify = req.params.param;
+      const user = await this.repository.create(body)
+  
+      res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  }
 
 }
